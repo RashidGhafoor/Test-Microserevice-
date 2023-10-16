@@ -11,6 +11,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,19 +25,23 @@ class GoldPricesUrlServiceImplTest {
 
     @Mock
     private GoldPricesRepository goldPricesRepository;
-    String url = "https://api.nbp.pl/api/cenyzlota/";
+    @Mock
+    private RestTemplate restTemplate;
+    String url = "https://somewebsite.com";
     @InjectMocks
     private GoldPricesUrlServiceImpl goldPricesUrlServiceImpl;
 
     @Test
     public void testUrlSaveData() {
 
-
         doNothing().when(goldPricesRepository).deleteAll();
+        when(restTemplate.getForObject(url, String.class)).thenReturn("[{\"data\":\"2017-04-27\",\"cena\":157.24},{\"data\":\"2017-04-28\",\"cena\":157.43}]");
         Mockito.when(goldPricesRepository.saveAll(Mockito.anyIterable())).thenReturn(null);
 
         ResponseEntity<String> result = goldPricesUrlServiceImpl.saveUrlData(url);
 
+        verify(restTemplate, times(1)).getForObject(url, String.class);
+        verify(goldPricesRepository, times(1)).saveAll(Mockito.anyIterable());
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("Data saved successfully", result.getBody());
 
