@@ -1,2 +1,2 @@
-# Test-Microserevice-
-It is a test microservice that deals with Gold Prices form and api end point
+# Test-Microserevice
+It is a test microservice that deals with Gold Prices form an api end point
