@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 public interface UrlService {
     /**
      * Parses the data form an url and saves it in a database
-     * @return ResponseEntity<String> request response for the http request to save data data
+     * @return ResponseEntity<String> request response to the http request to save data data
      */
     public ResponseEntity<String> saveUrlData(String url);
 

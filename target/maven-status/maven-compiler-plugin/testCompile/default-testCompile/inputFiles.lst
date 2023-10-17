@@ -1,1 +1,3 @@
-/home/rashid/Spring Projects/gold-prices/src/test/java/com/example/goldprices/GoldPricesApplicationTests.java
+/home/rashid/Spring Projects/Test-Microserevice-/src/test/java/com/example/goldprices/controller/GoldPricesControllerTest.java
+/home/rashid/Spring Projects/Test-Microserevice-/src/test/java/com/example/goldprices/service/impl/GoldPricesUrlServiceImplTest.java
+/home/rashid/Spring Projects/Test-Microserevice-/src/test/java/com/example/goldprices/GoldPricesApplicationTests.java

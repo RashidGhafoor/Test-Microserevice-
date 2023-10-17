@@ -1,6 +1,7 @@
 package com.example.goldprices.controller;
 
 import com.example.goldprices.service.UrlService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +16,7 @@ public class GoldPricesController {
     String url;
     private final UrlService urlService;
 
+    @Autowired
     public GoldPricesController(UrlService urlService) {
         this.urlService = urlService;
     }
