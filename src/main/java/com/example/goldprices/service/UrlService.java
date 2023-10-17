@@ -1,6 +1,8 @@
 package com.example.goldprices.service;
 
 
+import com.example.goldprices.exceptions.InvalidDateFormatException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.ResponseEntity;
 
 /**
@@ -10,16 +12,16 @@ import org.springframework.http.ResponseEntity;
 public interface UrlService {
     /**
      * Parses the data form an url and saves it in a database
-     * @return ResponseEntity<String> request response to the http request to save data data
+     * @return true if the data is saved successfully
      */
-    public ResponseEntity<String> saveUrlData(String url);
+    public boolean saveUrlData(String url) throws JsonProcessingException;
 
     /**
      * Finds and returns data from a specific date
      * @param date the date on which the data is to be returned
      * @return ResponseEntity<String> request response containing the data
      */
-    Double getDataOnSpecificDate(String date);
+    Double getDataOnSpecificDate(String date) throws InvalidDateFormatException;
 
     /**
      * Deletes records between a range of dates from the database
@@ -27,5 +29,5 @@ public interface UrlService {
      * @param endingDate ending date of range
      * @return ResponseEntity<String> http response to inform the result
      */
-    ResponseEntity<String> deleteRecordsBetweenDates(String startingDate, String endingDate);
+    boolean deleteRecordsBetweenDates(String startingDate, String endingDate) throws InvalidDateFormatException;
 }

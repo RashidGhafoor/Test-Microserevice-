@@ -2,6 +2,7 @@ package com.example.goldprices.service.impl;
 
 import com.example.goldprices.model.GoldPrice;
 import com.example.goldprices.repository.GoldPricesRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,13 +10,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -32,23 +32,21 @@ class GoldPricesUrlServiceImplTest {
     private GoldPricesUrlServiceImpl goldPricesUrlServiceImpl;
 
     @Test
-    public void testUrlSaveData() {
+    public void testUrlSaveData() throws JsonProcessingException {
 
         doNothing().when(goldPricesRepository).deleteAll();
         when(restTemplate.getForObject(url, String.class)).thenReturn("[{\"data\":\"2017-04-27\",\"cena\":157.24},{\"data\":\"2017-04-28\",\"cena\":157.43}]");
         Mockito.when(goldPricesRepository.saveAll(Mockito.anyIterable())).thenReturn(null);
 
-        ResponseEntity<String> result = goldPricesUrlServiceImpl.saveUrlData(url);
+        boolean result = goldPricesUrlServiceImpl.saveUrlData(url);
 
         verify(restTemplate, times(1)).getForObject(url, String.class);
         verify(goldPricesRepository, times(1)).saveAll(Mockito.anyIterable());
-        assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("Data saved successfully", result.getBody());
-
+        assertTrue(result);
     }
 
     @Test
-    void getDataOnSpecificDate() throws Exception {
+    void testGetDataOnSpecificDate() throws Exception {
 
         String dateString = "2017-05-09";
         Date givenDate = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
@@ -58,7 +56,7 @@ class GoldPricesUrlServiceImplTest {
         goldPriceEntity.setData(givenDate);
         goldPriceEntity.setCena(value);
 
-        when(goldPricesRepository.findByDate(givenDate)).thenReturn(goldPriceEntity);
+        when(goldPricesRepository.findByData(givenDate)).thenReturn(Optional.of(goldPriceEntity));
 
         // Calling the service function and testing its response
         Double response = goldPricesUrlServiceImpl.getDataOnSpecificDate(dateString);
@@ -67,24 +65,23 @@ class GoldPricesUrlServiceImplTest {
     }
 
     @Test
-    void deleteRecordsBetweenDates() throws ParseException {
+    void testDeleteRecordsBetweenDates() throws ParseException {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String startingDate = "2017-05-12", endingDate = "2018-04-10";
         Date startDate = sdf.parse(startingDate);
         Date endDate = sdf.parse(endingDate);
 
-        doNothing().when(goldPricesRepository).deleteRecordsBetweenDates(startDate, endDate);
+        doNothing().when(goldPricesRepository).deleteByDataBetween(startDate, endDate);
 
-        ResponseEntity<String> result = goldPricesUrlServiceImpl.deleteRecordsBetweenDates(startingDate, endingDate);
+        boolean result = goldPricesUrlServiceImpl.deleteRecordsBetweenDates(startingDate, endingDate);
 
-        verify(goldPricesRepository, times(1)).deleteRecordsBetweenDates(startDate, endDate);
-        assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("Records Deleted Successfully", result.getBody());
+        verify(goldPricesRepository, times(1)).deleteByDataBetween(startDate, endDate);
+        assertTrue(result);
     }
 
     @Test
-    void parseDateFromString() throws ParseException {
+    void testParseDateFromString() throws ParseException {
 
         String date = "2018-04-03";
         Date parsedDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);

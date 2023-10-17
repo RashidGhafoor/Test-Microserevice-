@@ -8,17 +8,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface GoldPricesRepository extends JpaRepository<GoldPrice, UUID> {
-
-    @Query("SELECT e FROM GoldPrice e WHERE e.data = :searchDate")
-    GoldPrice findByDate(@Param("searchDate") Date date);
-
-    @Modifying
-    @Query("DELETE FROM GoldPrice e WHERE e.data BETWEEN :startDate AND :endDate")
-    void deleteRecordsBetweenDates(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+    Optional<GoldPrice> findByData(Date date);
+    void deleteByDataBetween(Date startDate, Date endDate);
 
 }

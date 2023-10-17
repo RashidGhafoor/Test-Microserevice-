@@ -24,18 +24,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class GoldPricesControllerTest {
     @Autowired
     MockMvc mvc;
-    @Mock
-    UrlService urlService;
     @Test
     void saveGoldPrices() throws Exception {
-
-        String url = "https://somewebsite.com";
-        Mockito.when(urlService.saveUrlData(url)).thenReturn(ResponseEntity.ok().body("Mocked response"));
-        System.out.println(urlService.saveUrlData(url));
-
         mvc.perform(
                         MockMvcRequestBuilders.get("/saveGoldPrices"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Mocked response"));
+                .andExpect(content().string("Data saved successfully"));
     }
 }
