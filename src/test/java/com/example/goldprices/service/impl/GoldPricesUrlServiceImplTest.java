@@ -74,10 +74,9 @@ class GoldPricesUrlServiceImplTest {
 
         doNothing().when(goldPricesRepository).deleteByDataBetween(startDate, endDate);
 
-        boolean result = goldPricesUrlServiceImpl.deleteRecordsBetweenDates(startingDate, endingDate);
+        goldPricesUrlServiceImpl.deleteRecordsBetweenDates(startingDate, endingDate);
 
         verify(goldPricesRepository, times(1)).deleteByDataBetween(startDate, endDate);
-        assertTrue(result);
     }
 
     @Test

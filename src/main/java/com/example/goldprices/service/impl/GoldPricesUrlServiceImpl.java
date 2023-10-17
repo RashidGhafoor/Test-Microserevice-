@@ -63,15 +63,14 @@ public class GoldPricesUrlServiceImpl implements UrlService {
 
     @Override
     @Transactional
-    public boolean deleteRecordsBetweenDates(String startDate, String endDate) {
+    public void deleteRecordsBetweenDates(String startDate, String endDate) {
 
         Date startingDate = parseDateFromString(startDate);
         Date endingDate = parseDateFromString(endDate);
         goldPricesRepository.deleteByDataBetween(startingDate, endingDate);
-
-        return true;
     }
 
+    // Helper method
     public Date parseDateFromString (String date) {
 
         if (!date.matches(dateFormatPattern)) {

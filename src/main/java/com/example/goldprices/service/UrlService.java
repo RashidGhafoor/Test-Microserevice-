@@ -14,12 +14,12 @@ public interface UrlService {
      * Parses the data form an url and saves it in a database
      * @return true if the data is saved successfully
      */
-    public boolean saveUrlData(String url) throws JsonProcessingException;
+    boolean saveUrlData(String url) throws JsonProcessingException;
 
     /**
-     * Finds and returns data from a specific date
+     * Finds and returns data for a specific date
      * @param date the date on which the data is to be returned
-     * @return ResponseEntity<String> request response containing the data
+     * @return double returns the data value if found otherwise returns -1
      */
     Double getDataOnSpecificDate(String date) throws InvalidDateFormatException;
 
@@ -27,7 +27,7 @@ public interface UrlService {
      * Deletes records between a range of dates from the database
      * @param startingDate starting date of range
      * @param endingDate ending date of range
-     * @return ResponseEntity<String> http response to inform the result
+     * @return true if the records are deleted successfully
      */
-    boolean deleteRecordsBetweenDates(String startingDate, String endingDate) throws InvalidDateFormatException;
+    void deleteRecordsBetweenDates(String startingDate, String endingDate) throws InvalidDateFormatException;
 }

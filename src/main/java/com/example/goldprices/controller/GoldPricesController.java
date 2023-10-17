@@ -46,12 +46,12 @@ public class GoldPricesController {
 
     @DeleteMapping("/deletePricesBetween/{startDate}/{endDate}")
     public ResponseEntity<String> deleteGoldPricesOnADateRange(@PathVariable String startDate, @PathVariable String endDate) {
-        if(urlService.deleteRecordsBetweenDates(startDate, endDate)){
-            return ResponseEntity.ok().body("Records Deleted Successfully");
-        } else {
-            return ResponseEntity.internalServerError()
-                    .body("An Error Occurred");
-        }
+        urlService.deleteRecordsBetweenDates(startDate, endDate);
+        return ResponseEntity.ok().body("Records Deleted Successfully");
+//        } else {
+//            return ResponseEntity.internalServerError()
+//                    .body("An Error Occurred");
+//        }
     }
 
 }

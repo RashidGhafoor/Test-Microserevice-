@@ -25,10 +25,37 @@ class GoldPricesControllerTest {
     @Autowired
     MockMvc mvc;
     @Test
-    void saveGoldPrices() throws Exception {
+    void testSaveGoldPrices() throws Exception {
         mvc.perform(
                         MockMvcRequestBuilders.get("/saveGoldPrices"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Data saved successfully"));
+    }
+
+
+    @Test
+    void testGetGoldPriceOnSpecificDate_Success() throws Exception {
+
+        mvc.perform(
+                        MockMvcRequestBuilders.get("/getPrice/2017-05-04"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(String.valueOf(156.09)));
+    }
+
+    @Test
+    void testGetGoldPriceOnSpecificDate_Failure() throws Exception {
+
+        mvc.perform(
+                        MockMvcRequestBuilders.get("/getPrice/2016-05-04"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Provided date isn't in the database. Please check your date again"));
+    }
+
+    @Test
+    void testDeleteGoldPricesOnADateRange() throws Exception {
+        mvc.perform(
+                        MockMvcRequestBuilders.delete("/deletePricesBetween/2017-05-18/2018-04-04"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Records Deleted Successfully"));
     }
 }
