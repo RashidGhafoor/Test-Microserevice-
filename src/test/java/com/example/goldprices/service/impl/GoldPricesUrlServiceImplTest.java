@@ -3,6 +3,7 @@ package com.example.goldprices.service.impl;
 import com.example.goldprices.model.GoldPrice;
 import com.example.goldprices.repository.GoldPricesRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,22 +28,25 @@ class GoldPricesUrlServiceImplTest {
     private GoldPricesRepository goldPricesRepository;
     @Mock
     private RestTemplate restTemplate;
+    @Mock
+    private ObjectMapper objectMapper;
     String url = "https://somewebsite.com";
     @InjectMocks
     private GoldPricesUrlServiceImpl goldPricesUrlServiceImpl;
 
     @Test
     public void testUrlSaveData() throws JsonProcessingException {
+        String mockResponse = "[{\"data\":\"2017-04-27\",\"cena\":157.24},{\"data\":\"2017-04-28\",\"cena\":157.43}]";
 
         doNothing().when(goldPricesRepository).deleteAll();
-        when(restTemplate.getForObject(url, String.class)).thenReturn("[{\"data\":\"2017-04-27\",\"cena\":157.24},{\"data\":\"2017-04-28\",\"cena\":157.43}]");
-        Mockito.when(goldPricesRepository.saveAll(Mockito.anyIterable())).thenReturn(null);
+        when(restTemplate.getForObject(url, String.class)).thenReturn(mockResponse);
+        when(objectMapper.readValue(mockResponse, GoldPrice[].class)).thenReturn(new GoldPrice[]{new GoldPrice()});
+        when(goldPricesRepository.saveAll(Mockito.anyIterable())).thenReturn(null);
 
-        boolean result = goldPricesUrlServiceImpl.saveUrlData(url);
+        goldPricesUrlServiceImpl.saveUrlData(url);
 
         verify(restTemplate, times(1)).getForObject(url, String.class);
         verify(goldPricesRepository, times(1)).saveAll(Mockito.anyIterable());
-        assertTrue(result);
     }
 
     @Test

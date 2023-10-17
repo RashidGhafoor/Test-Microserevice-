@@ -58,4 +58,12 @@ class GoldPricesControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("Records Deleted Successfully"));
     }
+
+    @Test
+    void testDeleteGoldPricesOnADateRange_InvalidDate() throws Exception {
+        mvc.perform(
+                        MockMvcRequestBuilders.delete("/deletePricesBetween/2017-05-18/2018-04666-04"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Invalid date format. Please use 'yyyy-MM-dd' format"));
+    }
 }

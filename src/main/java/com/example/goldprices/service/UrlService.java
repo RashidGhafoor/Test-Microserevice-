@@ -14,7 +14,7 @@ public interface UrlService {
      * Parses the data form an url and saves it in a database
      * @return true if the data is saved successfully
      */
-    boolean saveUrlData(String url) throws JsonProcessingException;
+    void saveUrlData(String url) throws JsonProcessingException;
 
     /**
      * Finds and returns data for a specific date

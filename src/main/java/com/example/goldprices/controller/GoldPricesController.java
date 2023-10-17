@@ -31,7 +31,7 @@ public class GoldPricesController {
             return ResponseEntity.ok("Data saved successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Filed to save data");
+                .body("Filed to save data: " + e.getMessage());
         }
     }
 
@@ -48,10 +48,6 @@ public class GoldPricesController {
     public ResponseEntity<String> deleteGoldPricesOnADateRange(@PathVariable String startDate, @PathVariable String endDate) {
         urlService.deleteRecordsBetweenDates(startDate, endDate);
         return ResponseEntity.ok().body("Records Deleted Successfully");
-//        } else {
-//            return ResponseEntity.internalServerError()
-//                    .body("An Error Occurred");
-//        }
     }
 
 }

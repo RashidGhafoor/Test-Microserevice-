@@ -24,30 +24,26 @@ public class GoldPricesUrlServiceImpl implements UrlService {
 
     private final GoldPricesRepository goldPricesRepository;
     private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
     private static final String dateFormatPattern = "\\d{4}-\\d{2}-\\d{2}";
 
-    public GoldPricesUrlServiceImpl(GoldPricesRepository goldPricesRepository, RestTemplate restTemplate){
+    public GoldPricesUrlServiceImpl(GoldPricesRepository goldPricesRepository, RestTemplate restTemplate, ObjectMapper objectMapper){
         this.goldPricesRepository = goldPricesRepository;
         this.restTemplate = restTemplate;
+        this.objectMapper = objectMapper;
     }
 
     @Override
-    public boolean saveUrlData(String url) throws JsonProcessingException {
+    public void saveUrlData(String url) throws JsonProcessingException {
 
         // Deleting previous entries to avoid duplication
         goldPricesRepository.deleteAll();
 
         String urlResponse = restTemplate.getForObject(url, String.class);
-        GoldPrice[] goldPrices;
-
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        goldPrices = objectMapper.readValue(urlResponse, GoldPrice[].class);
+        GoldPrice[] goldPrices = objectMapper.readValue(urlResponse, GoldPrice[].class);
         List<GoldPrice> goldPriceList = Arrays.asList(goldPrices);
 
         goldPricesRepository.saveAll(goldPriceList);
-
-        return true;
     }
 
     @Override
