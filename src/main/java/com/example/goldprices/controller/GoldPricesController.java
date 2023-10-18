@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class GoldPricesController {
-
     @Value("${app.GoldPricesUrl}")
     String url;
     private final UrlService urlService;

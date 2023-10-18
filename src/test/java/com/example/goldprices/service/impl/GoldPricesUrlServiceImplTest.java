@@ -30,7 +30,7 @@ class GoldPricesUrlServiceImplTest {
     private RestTemplate restTemplate;
     @Mock
     private ObjectMapper objectMapper;
-    String url = "https://somewebsite.com";
+    private final String url = "https://somewebsite.com";
     @InjectMocks
     private GoldPricesUrlServiceImpl goldPricesUrlServiceImpl;
 
